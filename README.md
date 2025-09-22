@@ -1,1 +1,1 @@
-# campus-event-planner-Jlia-e-Marina
+# campus-event-planner-Julia-e-Marina
