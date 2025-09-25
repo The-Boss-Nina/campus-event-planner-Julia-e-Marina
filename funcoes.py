@@ -8,19 +8,20 @@ def displayMenu():
     "6. Sair")
 
 def getEscolhaDoUsuario(): # op = opção
-    op = input("Escolha uma opção: ")
+    op = input("Escolha uma opção: ").strip()
     if op.isnumeric():
         op = int(op)
         return op
 
 def filtrarEventosPorCategoria(listaEventos, categoria):
     print(f"Os Eventos marcados como {categoria.capitalize()}, são:")
-    categoria= categoria.lower()
+    categoria= categoria.lower().strip()
     existemEventos= False
     for evento in listaEventos:
-        if evento["categoria"].lower() == categoria:
+        if evento["categoria"].lower().strip() == categoria:
+            existemEventos = True
             print(evento["nome"].capitalize())
-            existemEventos= True
+        #fazer validação de entradas com espaço 
         
     if not existemEventos: 
             print("Não existem Eventos com essa categoria!")
