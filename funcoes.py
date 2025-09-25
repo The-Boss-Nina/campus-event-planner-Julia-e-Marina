@@ -8,13 +8,13 @@ def displayMenu():
     "6. Sair")
 
 def getEscolhaDoUsuario(): # op = opção
-    op = input("Escolha uma opção: ").strip()
+    op = input("\nEscolha uma opção: ").strip()
     if op.isnumeric():
         op = int(op)
         return op
 
 def filtrarEventosPorCategoria(listaEventos, categoria):
-    print(f"Os Eventos marcados como {categoria.capitalize()}, são:")
+    print(f"\nOs Eventos marcados como {categoria.capitalize()}, são:\n")
     categoria= categoria.lower().strip()
     existemEventos= False
     for evento in listaEventos:
@@ -24,14 +24,14 @@ def filtrarEventosPorCategoria(listaEventos, categoria):
         #fazer validação de entradas com espaço 
         
     if not existemEventos: 
-            print("Não existem Eventos com essa categoria!")
+            print("****Não existem Eventos com essa categoria!****")
 
 def marcarEventoAtendido(listaEventos, id):
 
     for evento in listaEventos:
         if int(evento["id"]) == id:
             evento["participado"] = True
-            print(f"O Evento {evento['nome']} foi marcado como participado!")
+            print(f"\nO Evento {evento['nome']} foi marcado como participado!")
 
 
 def gerarRelatorio(listaEventos):
