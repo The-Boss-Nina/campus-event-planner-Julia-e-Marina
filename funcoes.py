@@ -17,39 +17,53 @@ def filtrarEventosPorCategoria(listaEventos, categoria):
     print(f"\nOs Eventos marcados como {categoria.capitalize()}, são:\n")
     categoria= categoria.lower().strip()
     existemEventos= False
+
     for evento in listaEventos:
         if evento["categoria"].lower().strip() == categoria:
             existemEventos = True
             print(evento["nome"].capitalize())
-        #fazer validação de entradas com espaço 
-        
-    if not existemEventos: 
+              
+    if existemEventos == False: 
             print("****Não existem Eventos com essa categoria!****")
 
 def marcarEventoAtendido(listaEventos, id):
 
     for evento in listaEventos:
         if int(evento["id"]) == id:
-            evento["participado"] = True
-            print(f"\nO Evento {evento['nome']} foi marcado como participado!")
+
+            if evento["participado"] == True:
+                resposta= input("\nEsse evento já foi marcado como participado, deseja desmarcar?(s/n): ").lower().strip()
+                if resposta in ["sim", "s"]:
+                    evento["participado"] = False
+                    print(f"\nO Evento {evento['nome']} foi desmarcado!")
+
+            else:
+                evento["participado"] = True
+                print(f"\nO Evento {evento['nome']} foi marcado como participado!")
 
 
 def gerarRelatorio(listaEventos):
-    print("--- RELATÓRIO DE EVENTOS ---")
-
+    print("\n--- RELATÓRIO DE EVENTOS ---")
+    listaCategoria = {}
+    participados = 0
     if len(listaEventos) == 0:
         print("Nenhum evento cadastrado!")
     else:
-        porCategoria=[]
-        participados = 0
         print("Total de Eventos: ", len(listaEventos))
-
+        
         for evento in listaEventos:
-
+            verifica = evento["categoria"].capitalize().strip()
+            if verifica in listaCategoria:   
+                listaCategoria[verifica] = listaCategoria[verifica] + 1
+            else:                  
+                listaCategoria[verifica] = 1
+        for evento in listaEventos:
             if evento['participado'] == True:
-                participados= participados + 1
-    
-    #falta fazer por categoria e porcentagem de participados
+                participados += 1
+
+        print("Por Categoria:",listaCategoria)
+        porcentagem = (participados/(len(listaEventos)) * 100) 
+        print(f"Participados: {porcentagem:.0f}% ({participados}/{len(listaEventos)})")
 
 
 def adicionarEvento(listaEventos, nome, data, local, categoria): #fiz isso aqui temporáriamente só pra poder testar as partes que eu fiz 
@@ -86,8 +100,11 @@ while op != 6:
     #listarEventos(listaEventos)
 
     elif op == 3:
-        categoria = input("Digite a categoria de eventos que deseja filtrar: ")
-        filtrarEventosPorCategoria(listaEventos, categoria)
+        if len(listaEventos) == 0:
+            print("Nenhum evento cadastrado ainda, não há o que filtrar!")
+        else:   
+            categoria = input("Digite a categoria de eventos que deseja filtrar: ")
+            filtrarEventosPorCategoria(listaEventos, categoria)
 
     elif op == 4:
         print("=====EVENTOS=====")
