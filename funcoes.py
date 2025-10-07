@@ -5,7 +5,9 @@ def displayMenu():
     "3. Filtrar por Categoria\n" \
     "4. Marcar Evento como Participado\n" \
     "5. Gerar Relatório\n" \
-    "6. Sair")
+    "6. Deletar Evento\n" \
+    "7. Procurar Evento\n" \
+    "8. Sair")
 
 def getEscolhaDoUsuario(): # op = opção
     op = input("\nEscolha uma opção: ").strip()
@@ -40,6 +42,8 @@ def marcarEventoAtendido(listaEventos, id):
             else:
                 evento["participado"] = True
                 print(f"\nO Evento {evento['nome']} foi marcado como participado!")
+        else:
+            print("ID inexistente!")
 
 
 def gerarRelatorio(listaEventos):
@@ -52,7 +56,7 @@ def gerarRelatorio(listaEventos):
         print("Total de Eventos: ", len(listaEventos))
         
         for evento in listaEventos:
-            verifica = evento["categoria"].capitalize().strip()
+            verifica = evento["categoria"].strip().capitalize()
             if verifica in listaCategoria:   
                 listaCategoria[verifica] = listaCategoria[verifica] + 1
             else:                  
@@ -83,7 +87,7 @@ def adicionarEvento(listaEventos, nome, data, local, categoria): #fiz isso aqui 
 displayMenu()
 listaEventos = []
 op = 0
-while op != 6:
+while op != 8:
 
     op = getEscolhaDoUsuario()
 
@@ -100,24 +104,55 @@ while op != 6:
     #listarEventos(listaEventos)
 
     elif op == 3:
+        listaCategoria =[]
         if len(listaEventos) == 0:
             print("Nenhum evento cadastrado ainda, não há o que filtrar!")
-        else:   
+        else: 
+            print("=====CATEGORIAS=====")
+            for evento in listaEventos:
+                categoria = evento["categoria"].strip().capitalize()
+                if categoria not in listaCategoria:   
+                    listaCategoria.append(categoria)
+        
+            for categorias in listaCategoria:
+                print(categorias)
+
             categoria = input("Digite a categoria de eventos que deseja filtrar: ")
             filtrarEventosPorCategoria(listaEventos, categoria)
 
     elif op == 4:
-        print("=====EVENTOS=====")
-        for evento in listaEventos:
-            print(f"{evento['id']} - {evento['nome']}")
+        if len(listaEventos) == 0:
+            print("Nenhum evento cadastrado ainda, não há o que marcar!")
+        else:
+            print("=====EVENTOS=====")
+            for evento in listaEventos:
+                print(f"{evento['id']} - {evento['nome']}")
         
-        id = int(input("\nDigite o ID do evento que deseja marcar como atendido: "))
-        marcarEventoAtendido(listaEventos, id)
+            id = int(input("\nDigite o ID do evento que deseja marcar como atendido: "))
+            marcarEventoAtendido(listaEventos, id)
 
     elif op == 5:
         gerarRelatorio(listaEventos)
 
     elif op == 6:
+        if len(listaEventos) == 0:
+            print("Nenhum evento cadastrado ainda, não há o que deletar!")
+        else:
+            print("=====EVENTOS=====")
+            for evento in listaEventos:
+                print(f"{evento['id']} - {evento['nome']}")
+            
+            id = int(input("\n Digite o ID do evento que você gostaria de deletar: "))
+            #deletarEvento(listaEventos, id)
+    
+    elif op == 7:
+        if len(listaEventos) == 0:
+            print("Nenhum evento cadastrado ainda, não há o que procurar!")
+        else:
+            nome = input("\nDigite o nome do evento: ")
+            #procurarEventoPorNome(listaEventos, nome)
+
+    elif op == 8:
         print("Programa encerrado!")
         
     else:
