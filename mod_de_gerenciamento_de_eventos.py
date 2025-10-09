@@ -41,3 +41,13 @@ def listarEventos(listaEventos):
     print("\n--- LISTA DE EVENTOS ---")
     for evento in listaEventos:
         print(f"ID: {evento['id']} | Nome: {evento['nome']} | Data: {evento['data']} | Local: {evento['local']} | Categoria: {evento['categoria']} | Participado: {evento['participado']}")
+
+# Buscar eventos por nome
+def procurarEventoPorNome(listaEventos, nome):
+    encontrados = [e for e in listaEventos if nome.lower() in e['nome'].lower()]
+    if not encontrados:
+        print("Nenhum evento encontrado com esse nome.")
+    else:
+        print("\n--- EVENTOS ENCONTRADOS ---")
+        for evento in encontrados:
+            print(f"ID: {evento['id']} | Nome: {evento['nome']} | Data: {evento['data']} | Local: {evento['local']} | Categoria: {evento['categoria']} | Participado: {evento['participado']}")
