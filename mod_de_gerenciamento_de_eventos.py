@@ -51,3 +51,12 @@ def procurarEventoPorNome(listaEventos, nome):
         print("\n--- EVENTOS ENCONTRADOS ---")
         for evento in encontrados:
             print(f"ID: {evento['id']} | Nome: {evento['nome']} | Data: {evento['data']} | Local: {evento['local']} | Categoria: {evento['categoria']} | Participado: {evento['participado']}")
+
+# Deletar evento por ID
+def deletarEvento(listaEventos, id):
+    for evento in listaEventos:
+        if evento['id'] == id:
+            listaEventos.remove(evento)
+            print(f"Evento '{evento['nome']}' removido com sucesso.")
+            return
+    print("Evento não encontrado.")
