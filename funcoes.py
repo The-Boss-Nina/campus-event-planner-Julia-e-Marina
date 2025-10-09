@@ -1,12 +1,12 @@
 def displayMenu():
-    print("=== Planejador de Eventos do Campus ===\n" \
-    "1. Adicionar Evento\n" \
-    "2. Ver Todos os Eventos\n" \
-    "3. Filtrar por Categoria\n" \
-    "4. Marcar Evento como Participado\n" \
-    "5. Gerar Relatório\n" \
-    "6. Deletar Evento\n" \
-    "7. Procurar Evento\n" \
+    print("=== Planejador de Eventos do Campus ===\n" 
+    "1. Adicionar Evento\n" 
+    "2. Ver Todos os Eventos\n" 
+    "3. Filtrar por Categoria\n" 
+    "4. Marcar Evento como Participado\n" 
+    "5. Gerar Relatório\n" 
+    "6. Deletar Evento\n" 
+    "7. Procurar Evento\n" 
     "8. Sair")
 
 def getEscolhaDoUsuario(): # op = opção
@@ -69,21 +69,6 @@ def gerarRelatorio(listaEventos):
         porcentagem = (participados/(len(listaEventos)) * 100) 
         print(f"Participados: {porcentagem:.0f}% ({participados}/{len(listaEventos)})")
 
-
-def adicionarEvento(listaEventos, nome, data, local, categoria): #fiz isso aqui temporáriamente só pra poder testar as partes que eu fiz 
-    novoID = len(listaEventos) 
-    evento = {  
-            "id": novoID+1,
-            "nome": nome,
-            "data": data, 
-            "local": local,
-            "categoria": categoria,
-            "participado": False
-            }
-    listaEventos.append(evento.copy())
-    print(f"O Evento {nome.capitalize()} foi adicionado com sucesso!")
-    return evento
-
 displayMenu()
 listaEventos = []
 op = 0
@@ -100,8 +85,8 @@ while op != 8:
         
         adicionarEvento(listaEventos, nome, data, local, categoria)
 
-    #elif op == 2:
-    #listarEventos(listaEventos)
+    elif op == 2:
+        listarEventos(listaEventos)
 
     elif op == 3:
         listaCategoria =[]
@@ -142,15 +127,15 @@ while op != 8:
             for evento in listaEventos:
                 print(f"{evento['id']} - {evento['nome']}")
             
-            id = int(input("\n Digite o ID do evento que você gostaria de deletar: "))
-            #deletarEvento(listaEventos, id)
+            id = int(input("\nDigite o ID do evento que você gostaria de deletar: "))
+            deletarEvento(listaEventos, id)
     
     elif op == 7:
         if len(listaEventos) == 0:
             print("Nenhum evento cadastrado ainda, não há o que procurar!")
         else:
             nome = input("\nDigite o nome do evento: ")
-            #procurarEventoPorNome(listaEventos, nome)
+            procurarEventoPorNome(listaEventos, nome)
 
     elif op == 8:
         print("Programa encerrado!")
