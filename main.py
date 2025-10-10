@@ -1,40 +1,104 @@
-def displayMenu():
-    print("=== Planejador de Eventos do Campus ===\n" 
-    "1. Adicionar Evento\n" 
-    "2. Ver Todos os Eventos\n" 
-    "3. Filtrar por Categoria\n" 
-    "4. Marcar Evento como Participado\n" 
-    "5. Gerar Relatório\n" 
-    "6. Deletar Evento\n" 
-    "7. Procurar Evento\n" 
-    "8. Sair")
+from datetime import datetime
 
-def getEscolhaDoUsuario(): # op = opção
+# Validação de data no formato AAAA-MM-DD
+def validarData(dataStr):
+    try:
+        datetime.strptime(dataStr, "%Y-%m-%d")
+        return True
+    except ValueError:
+        return False
+
+# Adiciona novo evento com validação
+def adicionarEvento(listaEventos, nome, data, local, categoria):
+    if not nome or not data or not local or not categoria:
+        print("Todos os campos devem ser preenchidos.")
+        return
+
+    if not validarData(data):
+        print("Data inválida. Use o formato AAAA-MM-DD.")
+        return
+
+    novoEvento = {
+        "id": len(listaEventos) + 1,
+        "nome": nome,
+        "data": data,
+        "local": local,
+        "categoria": categoria,
+        "participado": False
+    }
+    listaEventos.append(novoEvento)
+    print(f"O Evento '{nome}' foi adicionado com sucesso!")
+
+# Listar todos os eventos
+def listarEventos(listaEventos):
+    if not listaEventos:
+        print("Nenhum evento cadastrado.")
+        return
+
+    print("\n--- LISTA DE EVENTOS ---")
+    for evento in listaEventos:
+        print(f"ID: {evento['id']} | Nome: {evento['nome']} | Data: {evento['data']} | Local: {evento['local']} | Categoria: {evento['categoria']} | Participado: {evento['participado']}")
+
+# Buscar eventos por nome
+def procurarEventoPorNome(listaEventos, nome):
+    encontrados = [e for e in listaEventos if nome.lower() in e['nome'].lower()]
+    if not encontrados:
+        print("Nenhum evento encontrado com esse nome.")
+    else:
+        print("\n--- EVENTOS ENCONTRADOS ---")
+        for evento in encontrados:
+            print(f"ID: {evento['id']} | Nome: {evento['nome']} | Data: {evento['data']} | Local: {evento['local']} | Categoria: {evento['categoria']} | Participado: {evento['participado']}")
+
+# Deletar evento por ID
+def deletarEvento(listaEventos, id):
+    for evento in listaEventos:
+        if evento['id'] == id:
+            listaEventos.remove(evento)
+            print(f"Evento '{evento['nome']}' removido com sucesso.")
+            return
+    print("Evento não encontrado.")
+
+
+def displayMenu():
+    print("=== Planejador de Eventos do Campus ===\n" \
+          "1. Adicionar Evento\n" \
+          "2. Ver Todos os Eventos\n" \
+          "3. Filtrar por Categoria\n" \
+          "4. Marcar Evento como Participado\n" \
+          "5. Gerar Relatório\n" \
+          "6. Deletar Evento\n" \
+          "7. Procurar Evento\n" \
+          "8. Sair")
+
+
+def getEscolhaDoUsuario():  # op = opção
     op = input("\nEscolha uma opção: ").strip()
     if op.isnumeric():
         op = int(op)
         return op
 
+
 def filtrarEventosPorCategoria(listaEventos, categoria):
     print(f"\nOs Eventos marcados como {categoria.capitalize()}, são:\n")
-    categoria= categoria.lower().strip()
-    existemEventos= False
+    categoria = categoria.lower().strip()
+    existemEventos = False
 
     for evento in listaEventos:
         if evento["categoria"].lower().strip() == categoria:
             existemEventos = True
             print(evento["nome"].capitalize())
-              
-    if existemEventos == False: 
-            print("****Não existem Eventos com essa categoria!****")
+
+    if existemEventos == False:
+        print("****Não existem Eventos com essa categoria!****")
+
 
 def marcarEventoAtendido(listaEventos, id):
-
     for evento in listaEventos:
         if int(evento["id"]) == id:
 
             if evento["participado"] == True:
-                resposta= input("\nEsse evento já foi marcado como participado, deseja desmarcar?(s/n): ").lower().strip()
+                resposta = input(
+                    "\nEsse evento já foi marcado como participado, deseja desmarcar?(s/n): ").lower().strip()
                 if resposta in ["sim", "s"]:
                     evento["participado"] = False
                     print(f"\nO Evento {evento['nome']} foi desmarcado!")
@@ -54,19 +118,19 @@ def gerarRelatorio(listaEventos):
         print("Nenhum evento cadastrado!")
     else:
         print("Total de Eventos: ", len(listaEventos))
-        
+
         for evento in listaEventos:
             verifica = evento["categoria"].strip().capitalize()
-            if verifica in listaCategoria:   
+            if verifica in listaCategoria:
                 listaCategoria[verifica] = listaCategoria[verifica] + 1
-            else:                  
+            else:
                 listaCategoria[verifica] = 1
         for evento in listaEventos:
             if evento['participado'] == True:
                 participados += 1
 
-        print("Por Categoria:",listaCategoria)
-        porcentagem = (participados/(len(listaEventos)) * 100) 
+        print("Por Categoria:", listaCategoria)
+        porcentagem = (participados / (len(listaEventos)) * 100)
         print(f"Participados: {porcentagem:.0f}% ({participados}/{len(listaEventos)})")
 
 displayMenu()
@@ -77,28 +141,28 @@ while op != 8:
     op = getEscolhaDoUsuario()
 
     if op == 1:
-        
+
         nome = input("Nome do Evento: ")
-        data = input("Data (AAAA-MM-DD): ") 
+        data = input("Data (AAAA-MM-DD): ")
         local = input("Local: ")
         categoria = input("Categoria: ")
-        
+
         adicionarEvento(listaEventos, nome, data, local, categoria)
 
     elif op == 2:
         listarEventos(listaEventos)
 
     elif op == 3:
-        listaCategoria =[]
+        listaCategoria = []
         if len(listaEventos) == 0:
             print("Nenhum evento cadastrado ainda, não há o que filtrar!")
-        else: 
+        else:
             print("=====CATEGORIAS=====")
             for evento in listaEventos:
                 categoria = evento["categoria"].strip().capitalize()
-                if categoria not in listaCategoria:   
+                if categoria not in listaCategoria:
                     listaCategoria.append(categoria)
-        
+
             for categorias in listaCategoria:
                 print(categorias)
 
@@ -112,7 +176,7 @@ while op != 8:
             print("=====EVENTOS=====")
             for evento in listaEventos:
                 print(f"{evento['id']} - {evento['nome']}")
-        
+
             id = int(input("\nDigite o ID do evento que deseja marcar como atendido: "))
             marcarEventoAtendido(listaEventos, id)
 
@@ -126,10 +190,10 @@ while op != 8:
             print("=====EVENTOS=====")
             for evento in listaEventos:
                 print(f"{evento['id']} - {evento['nome']}")
-            
+
             id = int(input("\nDigite o ID do evento que você gostaria de deletar: "))
             deletarEvento(listaEventos, id)
-    
+
     elif op == 7:
         if len(listaEventos) == 0:
             print("Nenhum evento cadastrado ainda, não há o que procurar!")
@@ -139,7 +203,8 @@ while op != 8:
 
     elif op == 8:
         print("Programa encerrado!")
-        
+
     else:
         print("Valor inválido, tente novamente!")
+
 
